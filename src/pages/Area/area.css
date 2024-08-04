@@ -1,0 +1,59 @@
+/* 공통 스타일 */
+.icon-area {
+  width: 80px;
+  height: 80px;
+  background: url("../../../public/assets/images/icon/icon_area.png") 0 0 / 100%
+    auto no-repeat;
+}
+
+.icon-area_seoul {
+  background-position: 0 0%;
+}
+.icon-area_incheon {
+  background-position: 0 6.2%;
+}
+.icon-area_daejeon {
+  background-position: 0 12.5%;
+}
+.icon-area_taegu {
+  background-position: 0 18.75%;
+}
+.icon-area_gyeonggi {
+  background-position: 0 25%;
+}
+.icon-area_busan {
+  background-position: 0 31.26%;
+}
+.icon-area_ulsan {
+  background-position: 0 37.5%;
+}
+.icon-area_gwangju {
+  background-position: 0 43.75%;
+}
+.icon-area_gangwon {
+  background-position: 0 50%;
+}
+.icon-area_chungbuk {
+  background-position: 0 56.27%;
+}
+.icon-area_chungnam {
+  background-position: 0 62.51%;
+}
+.icon-area_gyeongbuk {
+  background-position: 0 68.77%;
+}
+.icon-area_gyeongnam {
+  background-position: 0 75%;
+}
+.icon-area_jeonbuk {
+  background-position: 0 81.28%;
+}
+.icon-area_jeonnam {
+  background-position: 0 87.53%;
+}
+.icon-area_jeju {
+  background-position: 0 93.8%;
+}
+.icon-area_sejong {
+  background-position: 0 100.03%;
+}
