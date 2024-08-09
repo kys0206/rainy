@@ -11,7 +11,7 @@ type Thema = {
   content: string
   adminId: string
   author: string
-  imgURL: string
+  imgName: string
 }
 
 export default function BannerPage() {
@@ -92,7 +92,7 @@ export default function BannerPage() {
                   marginTop: index === currentIndex ? '-110px' : '-10px'
                 }}>
                 <img
-                  src={thema.imgURL}
+                  src={thema.imgName}
                   alt={`slide-${index}`}
                   className="object-cover rounded-md shadow-lg"
                   style={{

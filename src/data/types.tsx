@@ -2,7 +2,7 @@ export type City = {
   _id: string
   city_name: string
   short_name: string
-  imgURL: string
+  imgName: string
 }
 
 export type District = {
@@ -28,7 +28,7 @@ export type Restaurant = {
   city_name: string
   si_gu_name: string
   store_name: string
-  imgURL: string
+  imgName: string
   short_info: string
 }
 

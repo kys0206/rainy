@@ -197,7 +197,7 @@ export default function AreaPage() {
                       <div
                         className="rounded-full hover:shadow-lg"
                         style={{
-                          backgroundImage: `url(${city.imgURL})`,
+                          backgroundImage: `url(${city.imgName})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           width: '100px',
@@ -346,7 +346,7 @@ export default function AreaPage() {
                     key={rest._id}>
                     <button className="" onClick={() => handleRestClick(rest)}>
                       <div>
-                        <img src={rest.imgURL} />
+                        <img src={rest.imgName} />
                       </div>
                       <div className="p-2">
                         <p className="text-center text-md">{rest.store_name}</p>
