@@ -72,7 +72,7 @@ export default function Login() {
               </Link>
 
               <Link
-                to="/login/find_email"
+                to="/find/email"
                 className="text-sm px-7"
                 style={{
                   borderLeft: '1px solid #e3dede',

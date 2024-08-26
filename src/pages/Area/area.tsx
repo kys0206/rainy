@@ -298,9 +298,9 @@ export default function AreaPage() {
       <div className="flex items-center justify-center w-full">
         <div className="w-full pb-24">
           <div className="pb-10 bg-gray-100">
-            <div className="flex px-36" style={{display: 'grid'}}>
-              <div className="flex w-full">
-                <div className="w-full pt-5">
+            <div className="flex px-5 md:px-10 lg:px-20" style={{display: 'grid'}}>
+              <div className="flex">
+                <div className="pt-5">
                   <div className="pb-4">
                     <p className="text-xl">
                       <b>{selectedCity}</b> 추천 여행지
@@ -329,7 +329,7 @@ export default function AreaPage() {
               </div>
             </div>
 
-            <div className="flex px-36" style={{display: 'grid'}}>
+            <div className="flex px-5 md:px-10 lg:px-20" style={{display: 'grid'}}>
               <div className="flex w-full">
                 <div className="w-full pt-5">
                   <div className="pb-4">

@@ -18,7 +18,9 @@ export type Trip = {
   city_name: string
   si_gu_name: string
   place_name: string
+  contact: string
   imgName: string
+  address: string
   web_url: string
   short_info: string
 }
@@ -40,6 +42,7 @@ export type Festival = {
   status: string // 진행중 / 종료
   title: string
   festival_period: string // 축제기간
+  festival_info: string
   content: string
   address: string
   entrace_fee: string // 이용요금

@@ -3,7 +3,7 @@ import {createContext, useContext, useState, useCallback, useEffect} from 'react
 import * as U from '../utils'
 import {post} from '../server'
 
-export type LoggedUser = {email: string; password: string}
+export type LoggedUser = {email: string; password: string; id?: string}
 type Callback = () => void
 
 type ContextType = {
@@ -20,6 +20,7 @@ type ContextType = {
   ) => void
   login: (email: string, password: string, callback?: Callback) => void
   logout: (Callback?: Callback) => void
+  id?: string
 }
 
 export const AuthContext = createContext<ContextType>({
@@ -41,6 +42,8 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
   const [loggedUser, setLoggedUser] = useState<LoggedUser | undefined>(undefined)
   const [jwt, setJwt] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const id = loggedUser?.id
 
   const signup = useCallback(
     (
@@ -72,17 +75,19 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
   )
 
   const login = useCallback((email: string, password: string, callback?: Callback) => {
-    const user = {email, password}
+    const user = {id, email, password}
     U.readStringP('jwt')
       .then(jwt => {
         setJwt(jwt ?? '')
         return post('/auth/login', user, jwt)
       })
       .then(res => res.json())
-      .then((result: {ok: boolean; errorMessage?: string}) => {
+      .then((result: {ok: boolean; id?: string; errorMessage?: string}) => {
         if (result.ok) {
-          setLoggedUser(notUsed => user)
-          U.writeObjectP('user', user).finally(() => callback && callback())
+          setLoggedUser({email, password, id: result.id})
+          U.writeObjectP('user', {email, password, id: result.id}).finally(
+            () => callback && callback()
+          )
           callback && callback()
         } else {
           setErrorMessage(result.errorMessage ?? '')
@@ -135,7 +140,8 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
     loggedUser,
     signup,
     login,
-    logout
+    logout,
+    id
   }
   return <AuthContext.Provider value={value} children={children} />
 }

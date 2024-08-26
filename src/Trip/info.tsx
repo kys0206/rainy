@@ -4,6 +4,7 @@ import {useLocation} from 'react-router-dom'
 export default function TripInfoPage() {
   const location = useLocation()
   const festival = location.state?.festival
+  console.log(festival)
 
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -68,10 +69,8 @@ export default function TripInfoPage() {
           isScrolled ? '-translate-y-40' : 'translate-y-0'
         }`}>
         <div className="w-8/12 p-5 text-left bg-white rounded-lg">
-          <p className="pb-5 text-xl font-black">{festival.title}</p>
-          <p className="pb-5 text-3xl font-black">
-            렛츠런파크 부산경남 블루밍 워터페스티벌
-          </p>
+          <p className="pb-5 text-xl font-black">{festival.festival_info}</p>
+          <p className="pb-5 text-3xl font-black">{festival.title}</p>
           <div className="pb-4">
             <div className="flex flex-col">
               <div className="">
@@ -97,7 +96,7 @@ export default function TripInfoPage() {
                 </div>
               </div>
               <div className="pt-10 pb-10 border-b-2">
-                <p className="text-sm">{festival.content}</p>
+                <p className="text-sm whitespace-pre-line">{festival.content}</p>
               </div>
               <div className="py-10 border-b-2">
                 <div className="flex">

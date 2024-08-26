@@ -16,8 +16,13 @@ import MapPage from '../pages/Map/map'
 import TripInfoPage from '../Trip/info'
 import AreaInfoPage from '../pages/Area/area_info'
 import FoodInfoPage from '../pages/Area/food_info'
+import Mypage from './Mypage/mypage'
+import FindEmail from './Mypage/Find/findEmail'
 
 export default function RoutesSetup() {
+  const storedData = window.localStorage.getItem('user')
+  const parsedData = storedData ? JSON.parse(storedData) : {}
+
   return (
     <div className="flex flex-col min-h-screen text-black font-pretendar">
       <Routes>
@@ -37,6 +42,8 @@ export default function RoutesSetup() {
 
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
+          <Route path="/find/email" element={<FindEmail />} />
+          <Route path="/mypage" element={<Mypage />} />
           <Route
             path="logout"
             element={

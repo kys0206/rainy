@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import {get} from '../../server'
+import {useNavigate} from 'react-router-dom'
 
 declare global {
   interface Window {
@@ -21,6 +22,13 @@ type Trip = {
 const MapPage = () => {
   const [trips, setTrips] = useState<Trip[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const navigate = useNavigate()
+
+  const handleTripClick = (trip: Trip) => {
+    navigate('/main/area/info', {state: {trip}})
+    window.scrollTo(0, 0)
+  }
 
   useEffect(() => {
     let container = document.getElementById('map') // 지도를 담을 영역의 DOM 레퍼런스
@@ -83,101 +91,53 @@ const MapPage = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="p-5">
-        <div className="pt-20 pb-4 text-xl font-bold">
+      <div className="w-full max-w-screen-xl p-5">
+        <div className="pt-20 pb-4 text-xl font-bold text-left">
           <p>테마가 있는 여행을 즐겨보세요.</p>
         </div>
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
           <div
             id="map"
-            className="rounded-lg"
-            style={{width: '600px', height: '600px'}}
+            className="flex-grow rounded-lg"
+            style={{width: '100%', height: '60vh'}}
           />
 
-          <div className="w-96 pl-7">
-            <div>
+          <div className="w-full mt-4 md:w-2/3 md:pl-7 md:mt-0">
+            <div className="pb-2">
               <p className="text-2xl font-bold">[여행지도] 추천 관광지</p>
             </div>
 
-            <div className="overflow-y-auto" style={{maxHeight: '600px'}}>
+            <div className="overflow-y-auto" style={{maxHeight: '50vh'}}>
               {trips.map((trip, index) => (
-                <div className="flex pt-16">
-                  <div className="w-28 h-28">
-                    <img
-                      className="object-cover w-full h-full rounded-lg"
-                      src={trip.imgName}
-                      alt={trip.place_name}
-                    />
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <div className="pl-6">
-                      <p className="font-bold">{trip.place_name}</p>
-                      <p className="text-sm text-gray-400">
-                        {trip.city_name} {trip.si_gu_name}
-                      </p>
+                <div key={index}>
+                  <button className="text-left" onClick={() => handleTripClick(trip)}>
+                    <div className="flex pt-10">
+                      <div className="w-28 h-28">
+                        <img
+                          className="object-cover w-full h-full rounded-lg"
+                          src={trip.imgName}
+                          alt={trip.place_name}
+                        />
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <div className="pl-6">
+                          <p className="font-bold">{trip.place_name}</p>
+                          <p className="text-sm text-gray-400">
+                            {trip.city_name} {trip.si_gu_name}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </button>
                 </div>
               ))}
-
-              {/* <div className="flex pt-16">
-                <div className="w-28 h-28">
-                  <img
-                    className="object-cover w-full h-full rounded-lg"
-                    src="/assets/images/beach/gangmoonbeach.png"
-                  />
-                </div>
-                <div className="flex items-center justify-center">
-                  <div className="pl-6">
-                    <p className="font-bold">강문해변</p>
-                    <p className="text-sm text-gray-400">강원 강릉시</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex pt-16">
-                <div className="w-28 h-28">
-                  <img
-                    className="object-cover w-full h-full rounded-lg"
-                    src="/assets/images/beach/gangmoonbeach.png"
-                  />
-                </div>
-                <div className="flex items-center justify-center">
-                  <div className="pl-6">
-                    <p className="font-bold">강문해변</p>
-                    <p className="text-sm text-gray-400">강원 강릉시</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex pt-16">
-                <div className="w-28 h-28">
-                  <img
-                    className="object-cover w-full h-full rounded-lg"
-                    src="/assets/images/beach/gangmoonbeach.png"
-                  />
-                </div>
-                <div className="flex items-center justify-center">
-                  <div className="pl-6">
-                    <p className="font-bold">강문해변</p>
-                    <p className="text-sm text-gray-400">강원 강릉시</p>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
 
         <div className="pt-10 pb-20">
-          <div className="flex">
-            <div
-              className="flex items-center justify-start w-full pl-12"
-              style={{height: '130px', backgroundColor: '#bdd5e5'}}>
-              <p className="text-2xl">
-                여행지도에서 <b>더 많은 추천테마</b> 보기
-              </p>
-            </div>
-            <img src="/assets/images/thema_banner_img.png" />
+          <div className="flex w-full">
+            <img className="w-full rounded-lg" src="/assets/images/thema_banner.png" />
           </div>
         </div>
       </div>

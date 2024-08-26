@@ -2,9 +2,10 @@ import type {ChangeEvent} from 'react'
 import {useState, useCallback} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../contexts'
+import {get, post} from '../../server'
 
 type SignUpFormType = Record<
-  'email' | 'password' | 'confirmPassword' | 'name' | 'birth' | 'phone',
+  'email' | 'password' | 'confirmPassword' | 'name' | 'birth' | 'phone' | 'code',
   string
 >
 
@@ -14,12 +15,14 @@ const initialFormState = {
   confirmPassword: '',
   name: '',
   birth: '',
-  phone: ''
+  phone: '',
+  code: ''
 }
 
 export default function SignUp() {
-  const [{email, password, confirmPassword, name, birth, phone}, setForm] =
+  const [{email, password, confirmPassword, name, birth, phone, code}, setForm] =
     useState<SignUpFormType>(initialFormState)
+  const [isCodeValid, setIsCodeValid] = useState<boolean>(false) // 인증 상태를 저장하는 상태 변수 추가
   const changed = useCallback(
     (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
       setForm(obj => ({...obj, [key]: e.target.value}))
@@ -29,12 +32,81 @@ export default function SignUp() {
 
   const navigate = useNavigate()
   const {signup} = useAuth()
+
   const createAccount = useCallback(() => {
     console.log(email, password, confirmPassword)
+    if (!isCodeValid) {
+      alert('이메일 인증이 완료되지 않았습니다. 인증 후 다시 시도해주세요.')
+      return
+    }
     if (password === confirmPassword) {
       signup(email, password, name, birth, phone, () => navigate('/'))
-    } else alert('비밀번호가 일치하지 않습니다. 다시 입력하세요')
-  }, [confirmPassword, email, navigate, password, name, birth, phone, signup])
+    } else {
+      alert('비밀번호가 일치하지 않습니다. 다시 입력하세요')
+    }
+  }, [
+    isCodeValid,
+    confirmPassword,
+    email,
+    navigate,
+    password,
+    name,
+    birth,
+    phone,
+    signup
+  ])
+
+  const onSendMail = useCallback(
+    (event: {preventDefault: () => void}) => {
+      event.preventDefault()
+
+      if (!email) {
+        alert('이메일이 입력되지 않았습니다. 사용하실 이메일을 입력해주세요.')
+        return
+      }
+
+      post('/auth/createAuthCode', {email})
+        .then(response => {
+          console.log('>> 인증코드가 발송되었습니다.')
+          alert('인증코드가 발송되었습니다.')
+        })
+        .catch(error => {
+          console.error('인증코드 발송 오류:', error)
+          alert('인증코드 발송 중 오류가 발생했습니다.')
+        })
+    },
+    [email]
+  )
+
+  const onCheckCode = useCallback(
+    (event: {preventDefault: () => void}) => {
+      event.preventDefault()
+
+      if (!email || !code) {
+        alert('이메일 또는 인증번호가 입력되지 않았습니다. 확인 후 다시 시도해주세요.')
+        return
+      }
+
+      get(`/auth/validate/code/${encodeURIComponent(email)}/${encodeURIComponent(code)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            setIsCodeValid(true) // 인증 성공 시 상태 업데이트
+            alert('인증이 성공적으로 완료되었습니다.')
+          } else {
+            setIsCodeValid(false) // 인증 실패 시 상태 업데이트
+            alert(
+              `인증번호가 올바르지 않습니다. 다시 시도해주세요. 오류: ${data.errorMessage}`
+            )
+          }
+        })
+        .catch(error => {
+          console.error('인증번호 확인 중 오류 발생:', error)
+          alert('인증번호 확인 중 오류가 발생했습니다.')
+        })
+    },
+    [email, code]
+  )
 
   return (
     <div className="pt-20">
@@ -45,17 +117,41 @@ export default function SignUp() {
           </div>
           <div className="flex justify-center pt-10 item-center">
             <div>
-              <div className="pb-6">
+              <div className="pb-4">
                 <label className="block text-sm font-bold w-80">이메일 주소</label>
-                <input
-                  type="text"
-                  className="w-full py-2 leading-tight border-b-2 focus:outline-none focus:border-b-cyan-950"
-                  name="email"
-                  placeholder="예) rainy@rainy.co.kr"
-                  value={email}
-                  onChange={changed('email')}
-                />
+                <div className="flex">
+                  <input
+                    type="text"
+                    className="w-full py-2 leading-tight border-b-2 focus:outline-none focus:border-b-cyan-950"
+                    name="email"
+                    placeholder="예) rainy@rainy.co.kr"
+                    value={email}
+                    onChange={changed('email')}
+                  />
+                  <button
+                    className="w-24 text-white bg-blue-300 border border-gray-200 rounded-lg"
+                    onClick={onSendMail}>
+                    인증하기
+                  </button>
+                </div>
               </div>
+
+              <div className="flex pb-8">
+                <input
+                  className="w-full py-2 leading-tight border-b-2 focus:outline-none focus:border-b-cyan-950"
+                  type="text"
+                  placeholder="인증번호를 입력하세요"
+                  value={code}
+                  onChange={changed('code')}
+                />
+
+                <button
+                  className="w-24 text-white bg-blue-300 border border-gray-200 rounded-lg"
+                  onClick={onCheckCode}>
+                  확인
+                </button>
+              </div>
+
               <div className="mb-6">
                 <label className="block text-sm font-bold">비밀번호</label>
                 <input
