@@ -81,7 +81,7 @@ export default function Login() {
                 이메일 찾기
               </Link>
 
-              <Link to="/login/find_password" className="text-sm px-7">
+              <Link to="/find/password" className="text-sm px-7">
                 비밀번호 찾기
               </Link>
             </div>

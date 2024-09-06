@@ -1,4 +1,5 @@
 import {useState, useEffect, useCallback, ChangeEvent} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {get, post} from '../../server'
 
 import {FcCellPhone} from 'react-icons/fc'
@@ -27,12 +28,15 @@ const initialFormState = {
 export default function Mypage() {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [successMessage, setSuccessMessage] = useState<string>('')
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [
     {name, email, phone, birth, password, newPassword, confirm_new_password},
     setForm
   ] = useState<LoginFormType>(initialFormState)
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false)
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true)
+
+  const navigate = useNavigate()
 
   const storedData = window.localStorage.getItem('user')
   const parsedData = storedData ? JSON.parse(storedData) : {}
@@ -113,8 +117,8 @@ export default function Mypage() {
 
       const result = await response.json()
       if (result.ok) {
-        setSuccessMessage('비밀번호가 성공적으로 변경되었습니다.')
         setErrorMessage('')
+        setIsModalOpen(true)
       } else {
         setErrorMessage(result.errorMessage)
       }
@@ -123,6 +127,11 @@ export default function Mypage() {
         setErrorMessage(error.message)
       }
     }
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    navigate('/')
   }
 
   return (
@@ -257,6 +266,21 @@ export default function Mypage() {
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="p-6 bg-white rounded-lg shadow-lg">
+            <p className="text-lg font-bold">비밀번호가 성공적으로 변경되었습니다.</p>
+            <div className="w-full pt-5">
+              <button
+                className="w-full px-4 py-2 mt-4 text-white bg-gray-500 rounded-lg"
+                onClick={closeModal}>
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

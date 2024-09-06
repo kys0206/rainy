@@ -18,6 +18,7 @@ import AreaInfoPage from '../pages/Area/area_info'
 import FoodInfoPage from '../pages/Area/food_info'
 import Mypage from './Mypage/mypage'
 import FindEmail from './Mypage/Find/findEmail'
+import FindPassword from './Mypage/Find/findPassword'
 
 export default function RoutesSetup() {
   const storedData = window.localStorage.getItem('user')
@@ -43,6 +44,7 @@ export default function RoutesSetup() {
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
           <Route path="/find/email" element={<FindEmail />} />
+          <Route path="/find/password" element={<FindPassword />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route
             path="logout"

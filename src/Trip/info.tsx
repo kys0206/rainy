@@ -74,9 +74,9 @@ export default function TripInfoPage() {
           <div className="pb-4">
             <div className="flex flex-col">
               <div className="">
-                <div className="py-2 bg-red-400 rounded-md w-28">
+                <div className="py-1 bg-red-400 rounded-md w-28">
                   <p className="text-lg font-bold text-center text-white">
-                    {festival.status}
+                    {festival.status == true ? '축제 진행중' : '축제 미진행중'}
                   </p>
                 </div>
               </div>

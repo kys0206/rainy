@@ -1,16 +1,16 @@
 import type {ChangeEvent} from 'react'
 import {useState, useCallback} from 'react'
 import {Link} from 'react-router-dom'
-import {get} from '../../../server'
+import {post} from '../../../server'
 
-type LoginFormType = Record<'name' | 'birth' | 'phone', string>
-const initialFormState = {name: '', birth: '', phone: ''}
+type LoginFormType = Record<'name' | 'birth' | 'phone' | 'email', string>
+const initialFormState = {name: '', birth: '', phone: '', email: ''}
 
-export default function FindEmail() {
+export default function FindPassword() {
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [{name, birth, phone}, setForm] = useState<LoginFormType>(initialFormState)
-  const [email, setEmail] = useState<string | null>(null)
+  const [{name, birth, phone, email}, setForm] = useState<LoginFormType>(initialFormState)
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [successMessage, setSuccessMessage] = useState<string>('')
 
   const changed = useCallback(
     (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -19,35 +19,38 @@ export default function FindEmail() {
     []
   )
 
-  const findEmail = useCallback(async () => {
+  // 비밀번호 찾기 함수
+  const findPassword = useCallback(async () => {
     try {
-      const query = new URLSearchParams({name, birth, phone}).toString()
-      get(`/auth/find/email?${query}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.ok) {
-            setEmail(data.email)
-            setModalOpen(true)
-          } else {
-            alert(data.errorMessage || '이메일을 찾는 데 실패했습니다.')
-          }
-        })
+      const response = await post('/auth/create/temp/password', {
+        name,
+        birth,
+        phone,
+        email
+      })
+
+      const data = await response.json()
+      if (data.message === 'success') {
+        setSuccessMessage('임시 비밀번호가 이메일로 전송되었습니다.')
+        setModalOpen(true)
+      } else {
+        setErrorMessage(data.data || '임시 비밀번호 발급에 실패했습니다.')
+      }
     } catch (e) {
       if (e instanceof Error) setErrorMessage(e.message)
-      alert('이메일을 찾는 중 오류가 발생했습니다.')
     }
-  }, [name, birth, phone])
+  }, [name, birth, phone, email])
 
   const closeModal = () => {
     setModalOpen(false)
-    setEmail(null)
+    setSuccessMessage('')
   }
 
   return (
     <div className="pt-20">
       <div className="h-screen">
         <div className="flex justify-center pt-4 item-center">
-          <p className="text-2xl font-bold">회원 이메일 찾기</p>
+          <p className="text-2xl font-bold">회원 비밀번호 찾기</p>
         </div>
         <div className="flex justify-center pt-10 item-center">
           <div className="">
@@ -57,7 +60,7 @@ export default function FindEmail() {
                 type="text"
                 className="w-full py-2 leading-tight placeholder-gray-300 border-b-2 focus:outline-none focus:border-b-cyan-950"
                 name="name"
-                placeholder="성함을 입력해주세요"
+                placeholder="이름을 입력해주세요"
                 value={name}
                 onChange={changed('name')}
               />
@@ -87,11 +90,23 @@ export default function FindEmail() {
               />
             </div>
 
+            <div className="mb-6">
+              <label className="block text-sm font-bold">이메일</label>
+              <input
+                type="text"
+                className="w-full py-2 mb-3 leading-tight placeholder-gray-300 border-b-2 focus:outline-none focus:border-b-cyan-950"
+                name="email"
+                placeholder="가입시 입력하신 이메일을 입력하세요"
+                value={email}
+                onChange={changed('email')}
+              />
+            </div>
+
             <button
               type="submit"
               className="w-full py-3 font-bold text-white bg-blue-300 rounded-xl focus:outline-none focus:shadow-outline"
-              onClick={findEmail}>
-              이메일 찾기
+              onClick={findPassword}>
+              비밀번호 찾기
             </button>
 
             <div className="flex items-center justify-between pt-5 pb-10">
@@ -109,8 +124,8 @@ export default function FindEmail() {
                 로그인
               </Link>
 
-              <Link to="/find/password" className="text-sm px-7">
-                비밀번호 찾기
+              <Link to="/find/email" className="text-sm px-7">
+                이메일 찾기
               </Link>
             </div>
           </div>
@@ -121,11 +136,8 @@ export default function FindEmail() {
             <div className="fixed inset-0 bg-black opacity-50"></div>
             <div className="z-10 p-6 bg-white rounded-lg shadow-lg w-96">
               <div className="pb-5">
-                <h2 className="text-xl font-bold mb-7">이메일 찾기 결과</h2>
-                <p className="mb-2">검색결과 이메일은 아래와 같습니다</p>
-                <div className="w-full border border-gray-300 rounded-md">
-                  <p className="py-6 font-bold text-center">{email}</p>
-                </div>
+                <h2 className="text-xl font-bold mb-7">임시 비밀번호 발급완료</h2>
+                <p className="mb-2">{successMessage}</p>
               </div>
               <div className="flex justify-end">
                 <button

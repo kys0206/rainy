@@ -23,6 +23,7 @@ export type Trip = {
   address: string
   web_url: string
   short_info: string
+  tags: string[]
 }
 
 export type Restaurant = {
@@ -30,8 +31,11 @@ export type Restaurant = {
   city_name: string
   si_gu_name: string
   store_name: string
+  contact: string
   imgName: string
+  address: string
   short_info: string
+  tags: string[]
 }
 
 export type Festival = {
