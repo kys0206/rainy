@@ -17,6 +17,25 @@ const MapPage = () => {
   const [currentLocation, setCurrentLocation] = useState<any>(null)
   const [coords, setCoords] = useState<{[key: string]: any}>({})
   const [selectedPlace, setSelectedPlace] = useState<Trip | Restaurant | null>(null) // 선택된 place 상태 추가
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  const handleShareClick = () => {
+    setIsModalOpen(true)
+  }
+
+  // URL 복사
+  const handleCopyUrl = () => {
+    const url = window.location.href
+    navigator.clipboard.writeText(url).then(() => {
+      alert('URL이 복사되었습니다!')
+      setIsModalOpen(false)
+    })
+  }
+
+  // 모달 창 닫기
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+  }
 
   useEffect(() => {
     const container = document.getElementById('map')
@@ -148,6 +167,26 @@ const MapPage = () => {
     setSelectedPlace(null) // 선택된 place 정보를 초기화하여 사이드바 닫기
   }
 
+  const handleShare = () => {
+    const shareData = {
+      title: document.title,
+      text: '여행지와 음식점을 확인해보세요!',
+      url: window.location.href
+    }
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .then(() => console.log('공유 성공'))
+        .catch(err => console.error('공유 중 오류 발생', err))
+    } else {
+      navigator.clipboard
+        .writeText(shareData.url)
+        .then(() => alert('URL이 복사되었습니다!'))
+        .catch(err => console.error('URL 복사 중 오류 발생', err))
+    }
+  }
+
   return (
     <div className="flex">
       <div className="p-5 pt-24 w-80">
@@ -184,9 +223,9 @@ const MapPage = () => {
           ))}
         </ul>
       </div>
-      <div>
+      <div className="z-40">
         {selectedPlace && (
-          <div className="relative z-50 w-64 h-full bg-white shadow-sm top-24 left-30">
+          <div className="relative z-50 shadow-sm w-64bg-white top-24 left-30">
             <button
               className="absolute top-0 right-0 text-xl font-bold text-white w-7 h-7 hover:bg-gray-300"
               onClick={handleSidebarClose}>
@@ -230,10 +269,11 @@ const MapPage = () => {
             <div className="flex items-center justify-center pt-10">
               <div className="px-1">
                 <img
-                  className=""
+                  className="cursor-pointer"
                   src="/assets/images/icon/share_btn.png"
                   width="auto"
                   height="auto"
+                  onClick={handleShareClick}
                 />
               </div>
 
@@ -249,6 +289,33 @@ const MapPage = () => {
           </div>
         )}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-5 bg-white rounded">
+            <button
+              className="absolute text-2xl font-bold text-gray-500 top-2 right-2 hover:text-black"
+              onClick={handleCloseModal}>
+              &times;
+            </button>
+            <h2 className="mb-4 text-lg font-bold text-center">공유하기</h2>
+            <div className="flex pt-10">
+              <div className="flex">
+                <input
+                  className="w-64 pl-3 text-xs bg-gray-100 border border-gray-300 rounded-tl-md rounded-bl-md"
+                  value={window.location.href}
+                  readOnly
+                />
+                <button
+                  className="w-16 px-4 py-2 text-xs text-black border border-gray-300 rounded-tr-md rounded-br-md"
+                  onClick={handleCopyUrl}>
+                  복사
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="relative w-2/3 p-5 pt-24">
         <div className="flex h-screen">

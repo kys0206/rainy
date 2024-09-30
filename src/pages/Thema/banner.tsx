@@ -54,7 +54,7 @@ export default function BannerPage() {
         <div className="p-10">
           <div>
             <p className="text-3xl">다채로운 즐거움이 가득한</p>
-            <p className="text-3xl font-bold">전국 방방곡곡 추천 테마여행!</p>
+            <p className="text-3xl font-bold">전국 테마여행 추천!</p>
           </div>
 
           <div className="pt-10 pb-60">
