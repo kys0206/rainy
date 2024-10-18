@@ -7,6 +7,7 @@ import {get} from '../../server'
 
 type Thema = {
   _id: string
+  isPublic: boolean
   title: string
   content: string
   adminId: string
@@ -33,6 +34,7 @@ export default function BannerPage() {
     get('/thema/list')
       .then(res => res.json())
       .then(data => {
+        // console.log(data.body)
         if (data.ok) {
           setThemas(data.body)
         } else {
@@ -76,52 +78,57 @@ export default function BannerPage() {
               height: '400px',
               marginTop: '100px'
             }}>
-            {themas.map((thema, index) => (
-              <div
-                key={index}
-                onClick={() => handleClick(thema)}
-                className={`rounded-sm flex flex-col items-center justify-center flex-shrink-0 pl-4 pr-4 ${
-                  index === currentIndex ? 'shadow-md' : ''
-                }`}
-                style={{
-                  width: index === currentIndex ? '390px' : '400px',
-                  height: index === currentIndex ? '420px' : '320px',
-                  backgroundColor: index === currentIndex ? 'white' : 'transparent', // 현재 슬라이드만 배경색 적용
-                  borderTopRightRadius: '47%',
-                  borderTopLeftRadius: '47%',
-                  marginTop: index === currentIndex ? '-110px' : '-10px'
-                }}>
-                <img
-                  src={thema.imgName}
-                  alt={`slide-${index}`}
-                  className="object-cover rounded-md shadow-lg"
-                  style={{
-                    paddingTop: index === currentIndex ? '10px' : '',
-                    width: index === currentIndex ? '350px' : '400px',
-                    height: index === currentIndex ? '320px' : '300px',
-                    borderTopRightRadius: '50%',
-                    borderTopLeftRadius: '50%'
-                  }}
-                />
-
-                {index === currentIndex ? (
+            {themas.map(
+              (thema, index) =>
+                thema.isPublic && (
                   <div
-                    className="flex items-center justify-center w-full"
-                    style={{height: '100px'}}>
-                    <div className="pb-3 pl-6 pr-6">
-                      <p className="pt-3 text-lg text-center">{thema.title}</p>
-                      <p className="text-sm text-center text-gray-400">{thema.content}</p>
-                    </div>
+                    key={index}
+                    onClick={() => handleClick(thema)}
+                    className={`rounded-sm flex flex-col items-center justify-center flex-shrink-0 pl-4 pr-4 ${
+                      index === currentIndex ? 'shadow-md' : ''
+                    }`}
+                    style={{
+                      width: index === currentIndex ? '390px' : '400px',
+                      height: index === currentIndex ? '420px' : '320px',
+                      backgroundColor: index === currentIndex ? 'white' : 'transparent', // 현재 슬라이드만 배경색 적용
+                      borderTopRightRadius: '47%',
+                      borderTopLeftRadius: '47%',
+                      marginTop: index === currentIndex ? '-110px' : '-10px'
+                    }}>
+                    <img
+                      src={thema.imgName}
+                      alt={`slide-${index}`}
+                      className="object-cover rounded-md shadow-lg"
+                      style={{
+                        paddingTop: index === currentIndex ? '10px' : '',
+                        width: index === currentIndex ? '350px' : '400px',
+                        height: index === currentIndex ? '320px' : '300px',
+                        borderTopRightRadius: '50%',
+                        borderTopLeftRadius: '50%'
+                      }}
+                    />
+
+                    {index === currentIndex ? (
+                      <div
+                        className="flex items-center justify-center w-full"
+                        style={{height: '100px'}}>
+                        <div className="pb-3 pl-6 pr-6">
+                          <p className="pt-3 text-lg text-center">{thema.title}</p>
+                          <p className="text-sm text-center text-gray-400">
+                            {thema.content}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p
+                        className="text-lg text-center text-white"
+                        style={{marginTop: '-50px'}}>
+                        {thema.title}
+                      </p>
+                    )}
                   </div>
-                ) : (
-                  <p
-                    className="text-lg text-center text-white"
-                    style={{marginTop: '-50px'}}>
-                    {thema.title}
-                  </p>
-                )}
-              </div>
-            ))}
+                )
+            )}
           </div>
           <div className="flex items-center justify-center">
             <div className="absolute bottom-0 flex items-center w-1/2 px-4 py-5">

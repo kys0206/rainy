@@ -49,14 +49,14 @@ export default function Banner() {
   }
 
   return (
-    <div className="relative w-3/4 overflow-hidden">
+    <div className="relative w-3/4 overflow-hidden tablet:w-full">
       <div className="flex">
         <div
           className="flex transition-transform duration-500"
           style={{transform: `translateX(-${currentIndex * 100}%)`}}>
           {slides.map((slide, index) => (
             <div key={index} className="flex flex-shrink-0 w-full p-10">
-              <div className="flex flex-col justify-center w-1/2 pr-10">
+              <div className="flex flex-col justify-center w-1/2">
                 <div className="whitespace-pre-wrap w-36">
                   <div className="py-1 text-center bg-gray-600 rounded-tl-lg rounded-tr-lg rounded-br-lg">
                     <p className="text-xs text-white">{slide.title}</p>
@@ -76,7 +76,7 @@ export default function Banner() {
         </div>
       </div>
       <div className="flex items-center justify-center pt-5">
-        <div className="absolute bottom-0 flex items-center w-1/2 px-4 py-5">
+        <div className="absolute bottom-0 flex items-center w-1/2 px-4 py-5 tablet:w-2/3">
           <div className="relative w-full">
             <div className="h-1 bg-gray-200 rounded-full">
               <div

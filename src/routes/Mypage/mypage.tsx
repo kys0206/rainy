@@ -46,7 +46,7 @@ export default function Mypage() {
     get(`/auth/info/${userId}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data)
+        // console.log(data)
         if (data.ok) {
           setForm({
             ...data.body,
@@ -102,7 +102,30 @@ export default function Mypage() {
     }
   }, [newPassword, confirm_new_password])
 
-  const onSubmit = async () => {
+  const onEditInfo = async () => {
+    try {
+      const res = await post('/auth/modify/user/info', {
+        id: userId,
+        name,
+        birth,
+        phone
+      })
+
+      const result = await res.json()
+      if (result.ok) {
+        alert('사용자 정보 수정이 완료되었습니다.')
+        window.location.reload()
+      } else {
+        setErrorMessage(result.errorMessage)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message)
+      }
+    }
+  }
+
+  const onEditPW = async () => {
     if (!isPasswordMatch) {
       setErrorMessage('새 비밀번호가 일치하지 않습니다.')
       return
@@ -136,7 +159,7 @@ export default function Mypage() {
 
   return (
     <div className="py-20">
-      <div className="h-screen">
+      <div className="h-full">
         <div className="flex justify-center pt-10 item-center">
           <div className="p-10 border border-green-300 rounded-xl w-96">
             <div className="pb-3">
@@ -144,7 +167,11 @@ export default function Mypage() {
             </div>
             <div className="flex pb-6">
               <div className="pr-4">
-                <img src="/assets/images/icon/profile_icon.png" width="100px" />
+                <img
+                  src="/assets/images/icon/profile_icon.png"
+                  width="100px"
+                  alt="profile_icon"
+                />
               </div>
               <div className="w-full">
                 <div className="pb-1">
@@ -190,7 +217,8 @@ export default function Mypage() {
               className={`w-full py-3 font-bold rounded-xl focus:outline-none focus:shadow-outline ${
                 isFormComplete ? 'bg-gray-700 text-white' : 'bg-gray-300 text-white'
               }`}
-              disabled={!isFormComplete}>
+              disabled={!isFormComplete}
+              onClick={onEditInfo}>
               정보 수정
             </button>
           </div>
@@ -260,7 +288,7 @@ export default function Mypage() {
                   : 'bg-gray-300 text-white'
               }`}
               disabled={!isFormComplete || !isPasswordMatch}
-              onClick={onSubmit}>
+              onClick={onEditPW}>
               비밀번호 변경
             </button>
           </div>

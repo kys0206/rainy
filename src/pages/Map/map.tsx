@@ -189,13 +189,13 @@ const MapPage = () => {
 
   return (
     <div className="flex">
-      <div className="p-5 pt-24 w-80">
+      <div className="p-5 pt-24 w-80 tablet:w-44 tablet:mt-24 tablet:p-0 tablet:ml-5 tablet:pt-0 tablet:bg-transparent tablet:h-full tablet:bg-white tablet:bg-opacity-75 tablet:absolute tablet:z-10 tablet:left-0 tablet:top-0">
         <input
           type="text"
           placeholder="검색할 여행지 이름을 입력하세요"
           value={searchTerm}
           onChange={handleSearchChange}
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-2 mb-4 border rounded tablet:w-44 tablet:placeholder:text-xs"
         />
         <ul className="overflow-y-auto" style={{maxHeight: '600px'}}>
           {filteredPlaces.map((place, index) => (
@@ -204,17 +204,19 @@ const MapPage = () => {
               onClick={() => handleItemClick(place)}
               className="p-2 rounded cursor-pointer hover:bg-gray-100">
               <div className="flex items-center">
-                <strong className="mr-4">
+                <strong className="mr-3 tablet:text-sm">
                   {'place_name' in place ? place.place_name : place.store_name}
                 </strong>
                 <span className="text-xs text-gray-300">
                   {'place_name' in place ? '주변 여행지' : '음식점'}
                 </span>
               </div>
-              <p className="pb-1 text-sm">{place.address}</p>
-              <p className="text-sm text-green-500">{place.contact}</p>
+              <p className="pb-1 text-sm tablet:text-xs">{place.address}</p>
+              <p className="text-sm text-green-500 tablet:text-xs tablet:text-black">
+                {place.contact}
+              </p>
               {currentLocation && coords[place.address] && (
-                <p className="text-sm text-blue-500">
+                <p className="text-sm text-blue-500 tablet:text-xs">
                   내 위치로부터{' '}
                   {calculateDistance(currentLocation, coords[place.address])} km
                 </p>
@@ -223,11 +225,12 @@ const MapPage = () => {
           ))}
         </ul>
       </div>
-      <div className="z-40">
+
+      <div className="z-40 tablet:w-48 tablet:right-10 tablet:absolute tablet:top-2">
         {selectedPlace && (
-          <div className="relative z-50 shadow-sm w-64bg-white top-24 left-30">
+          <div className="relative z-50 shadow-sm w-64 bg-white top-24 left-30 tablet:w-52 tablet:p-2">
             <button
-              className="absolute top-0 right-0 text-xl font-bold text-white w-7 h-7 hover:bg-gray-300"
+              className="absolute top-0 right-0 text-xl font-bold text-black w-7 h-7 hover:bg-gray-300"
               onClick={handleSidebarClose}>
               x
             </button>
@@ -317,9 +320,9 @@ const MapPage = () => {
         </div>
       )}
 
-      <div className="relative w-2/3 p-5 pt-24">
+      <div className="relative w-full tablet:w-full p-5 pt-24">
         <div className="flex h-screen">
-          <div className="map" id="map" style={{width: '100%', height: '85vh'}} />
+          <div className="map w-full h-full" id="map" />
         </div>
       </div>
     </div>

@@ -55,7 +55,8 @@ export type Festival = {
   si_gu_name: string
   status: string // 진행중 / 종료
   title: string
-  festival_period: string // 축제기간
+  festival_start: string // 축제시작기간
+  festival_end: string // 축제마감기간
   festival_info: string
   content: string
   address: string

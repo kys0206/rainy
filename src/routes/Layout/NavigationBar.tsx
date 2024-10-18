@@ -1,8 +1,9 @@
 import {useState, useEffect} from 'react'
 import {Link as RRLink, NavLink} from 'react-router-dom'
 
+// icon
 import {IoPersonCircleOutline} from 'react-icons/io5'
-import {HiOutlineMenu} from 'react-icons/hi' // 햄버거 아이콘 사용
+import {HiOutlineMenu} from 'react-icons/hi'
 
 import {Link} from '../../components'
 import {useAuth} from '../../contexts'
@@ -13,10 +14,15 @@ export default function NavigationBar() {
   const {loggedUser} = useAuth()
   const [isMobile, setIsMobile] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  const storedData = window.localStorage.getItem('user')
+  const parsedData = storedData ? JSON.parse(storedData) : {}
+  const userName = parsedData.userName || ''
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 832)
+      setIsMobile(window.innerWidth <= 768)
     }
 
     window.addEventListener('resize', handleResize)
@@ -29,6 +35,10 @@ export default function NavigationBar() {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen)
+  }
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen)
   }
 
   return (
@@ -76,6 +86,8 @@ export default function NavigationBar() {
                   여행지도
                 </NavLink>
 
+                <div className="border" />
+
                 {!loggedUser && (
                   <NavLink
                     to="/login"
@@ -83,6 +95,15 @@ export default function NavigationBar() {
                     onClick={toggleMenu}>
                     로그인
                   </NavLink>
+                )}
+
+                {loggedUser && (
+                  <RRLink
+                    to="/mypage"
+                    className="p-2 hover:bg-gray-200"
+                    onClick={toggleMenu}>
+                    마이페이지
+                  </RRLink>
                 )}
 
                 {loggedUser && (
@@ -148,34 +169,54 @@ export default function NavigationBar() {
               여행지도
             </NavLink>
           </div>
-
-          {!loggedUser && (
-            <NavLink
-              to="/login"
-              className={({isActive}) =>
-                isActive ? 'text-skyblue' : 'hover:text-skyblue hover:font-bold'
-              }>
-              <img className="pr-4" src="/assets/images/icon/icon_header_profile1.png" />
-            </NavLink>
-          )}
-
-          {loggedUser && (
-            <>
-              <RRLink to="/mypage" className="ml-4 mr-4">
-                <IoPersonCircleOutline className="text-3xl" />
-              </RRLink>
-              <RRLink to="/logout" className="ml-4 mr-4">
-                <img
-                  className="pl-2"
-                  src="/assets/images/icon/logout.png"
-                  width="30"
-                  height="auto"
-                />
-              </RRLink>
-            </>
-          )}
         </div>
       )}
+      <div className="flex justify-center items-center tablet:hidden">
+        {!loggedUser && (
+          <NavLink
+            to="/login"
+            className={({isActive}) =>
+              isActive ? 'text-skyblue' : 'hover:text-skyblue hover:font-bold'
+            }>
+            <img className="pr-4" src="/assets/images/icon/icon_header_profile1.png" />
+          </NavLink>
+        )}
+
+        {loggedUser && (
+          <div className="flex">
+            <div className="flex justify-center items-center ">
+              <img
+                className="w-5 h-5"
+                src="/assets/images/icon/profile_icon.png"
+                alt="profile_icon"
+              />
+              <button
+                onClick={toggleDropdown}
+                className="flex items-center mr-4 ml-1 text-sm">
+                {userName}
+              </button>
+            </div>
+            {dropdownOpen && (
+              <div className="absolute right-5 w-40 mt-2 bg-white rounded-lg shadow-lg top-full text-center">
+                <NavLink
+                  to="/mypage"
+                  className="p-2 block hover:bg-gray-200 text-sm"
+                  onClick={toggleDropdown}>
+                  마이페이지
+                </NavLink>
+
+                <div className="border border-gray-100 mx-2" />
+                <NavLink
+                  to="/logout"
+                  className="p-2 block hover:bg-gray-200 text-sm"
+                  onClick={toggleDropdown}>
+                  로그아웃
+                </NavLink>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

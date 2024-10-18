@@ -118,7 +118,7 @@ export default function AreaPage() {
   }
 
   const nextSlide = () => {
-    if (currentSlide < Math.ceil(filteredTrips.length / 3) - 1) {
+    if (currentSlide < Math.ceil(filteredTrips.length / 2) - 1) {
       setCurrentSlide(currentSlide + 1)
     }
   }
@@ -175,7 +175,7 @@ export default function AreaPage() {
   }
 
   return (
-    <div className="">
+    <div className="tablet:w-full">
       <div className="p-10 pt-32 bg-blue-200">
         <div className="">
           <div>
@@ -218,7 +218,11 @@ export default function AreaPage() {
         <div className="flex pb-4">
           <p className="pr-3 text-2xl font-bold">{selectedCity || '지역명'}</p>
           <button>
-            <img src="/assets/images/icon/icon_zone_link.png" width="25px" />
+            <img
+              src="/assets/images/icon/icon_zone_link.png"
+              width="25px"
+              alt="icon_zone"
+            />
           </button>
         </div>
         <div className="flex items-center justify-between">
@@ -230,21 +234,25 @@ export default function AreaPage() {
           </button>
           <div className="w-full overflow-hidden">
             <div
-              className="flex transition-transform duration-300"
+              className="flex transition-transform duration-300 tablet:flex-col"
               style={{transform: `translateX(-${currentSlide * 100}%)`}}>
               {filteredTrips.length > 0 ? (
                 filteredTrips.map((trip, index) => (
-                  <div className="flex-shrink-0 w-1/3 px-2" key={trip._id}>
-                    <div className="bg-white border border-black rounded-md p-7">
+                  <div
+                    className="flex-shrink-0 w-1/3 px-2 sm:w-1/2 tablet:w-full"
+                    key={trip._id}>
+                    <div className="bg-white border border-black rounded-md p-7 tablet:p-4 tablet:m-0.5">
                       <div className="w-12 text-sm text-center text-white bg-gray-800 rounded-full">
                         테마
                       </div>
-                      <div className="pt-5 text-lg h-28">
+                      <div className="pt-5 text-lg h-28 tablet:h-20">
                         <p>[{selectedCity}]</p>
                         <p>{trip.place_name}</p>
                       </div>
-                      <div className="h-8 pt-2 w-52">
-                        <span className="text-sm text-gray-600">{trip.short_info}</span>
+                      <div className="h-8 pt-2 pb-14 tablet:pb-0">
+                        <span className="text-sm text-gray-600">
+                          {trip.short_info.slice(0, 32)}
+                        </span>
                       </div>
                       <div className="flex justify-end underline pt-7">
                         <a
@@ -266,7 +274,7 @@ export default function AreaPage() {
           <button
             className="px-2 py-2 ml-4 text-lg bg-white border border-black rounded-full"
             onClick={nextSlide}
-            disabled={currentSlide >= Math.ceil(filteredTrips.length / 3) - 1}>
+            disabled={currentSlide >= Math.ceil(filteredTrips.length / 2) - 1}>
             <FaArrowRight className="text-xs" />
           </button>
         </div>
@@ -311,7 +319,7 @@ export default function AreaPage() {
               <div className="flex flex-wrap justify-start w-full gap-4">
                 {randomTrips(filteredTrips).map((trip, index) => (
                   <div
-                    className="flex items-center justify-center bg-white rounded-lg shadow-md w-52 h-52"
+                    className="flex items-center justify-center bg-white rounded-lg shadow-md w-52 h-52 tablet:w-44 tablet:h-44 tablet:ml-2"
                     key={trip._id}>
                     <button className="" onClick={() => handleTripClick(trip)}>
                       <div className="">
@@ -342,7 +350,7 @@ export default function AreaPage() {
               <div className="flex flex-wrap justify-start w-full gap-4">
                 {filteredRestaurants.map((rest, index) => (
                   <div
-                    className="flex items-center justify-center bg-white rounded-lg shadow-md w-52 h-52"
+                    className="flex items-center justify-center bg-white rounded-lg shadow-md w-52 h-52 tablet:w-44 tablet:h-44 tablet:ml-2"
                     key={rest._id}>
                     <button className="" onClick={() => handleRestClick(rest)}>
                       <div>

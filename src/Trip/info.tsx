@@ -110,7 +110,7 @@ export default function TripInfoPage() {
                         src="/assets/images/icon/calendar_icon.png"
                       />
                       <p className="flex items-center justify-center pl-3 text-sm">
-                        {festival.festival_period}
+                        {festival.festival_start} ~ {festival.festival_end}
                       </p>
                     </div>
                     <div className="flex pt-5">

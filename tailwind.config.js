@@ -1,19 +1,18 @@
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       fontFamily: {
-        'pretendar': ['Pretendard-Regular'],
-        
-        'hanbit': ['KCC-Hanbit']
+        pretendar: ['Pretendard-Regular'],
+
+        hanbit: ['KCC-Hanbit']
       },
       colors: {
-        'skyblue': '#32acde',
-        'emerald': '#75e1ee'
-      }
+        skyblue: '#32acde',
+        emerald: '#75e1ee'
+      },
+      screens: {tablet: {max: '768px'}}
     }
   },
-plugins: [],
+  plugins: []
 }

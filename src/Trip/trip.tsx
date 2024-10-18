@@ -35,13 +35,13 @@ export default function FestivalInfoPage() {
   }, [])
 
   return (
-    <div className="pt-32">
+    <div className="pt-32 h-screen">
       <div className="w-1/2 contents">
         <div>
           <div className="flex items-center justify-center">
             <div className="pr-4">
               <select
-                className="p-3 border rounded-md w-44"
+                className="p-3 border rounded-md w-44 tablet:w-20"
                 value={selectedMonth}
                 onChange={handleSelectChange}>
                 <option value="">시기</option>
@@ -62,7 +62,7 @@ export default function FestivalInfoPage() {
 
             <div className="pr-4">
               <select
-                className="p-3 border rounded-md w-44"
+                className="p-3 border rounded-md w-44 tablet:w-32"
                 value={selectedMonth}
                 onChange={handleSelectChange}>
                 <option value="">지역</option>
@@ -87,7 +87,7 @@ export default function FestivalInfoPage() {
             </div>
 
             <div>
-              <button className="w-32 p-3 font-bold text-white bg-blue-400 rounded-md">
+              <button className="w-32 p-3 font-bold text-white bg-blue-400 rounded-md tablet:w-20">
                 검색
               </button>
             </div>
@@ -102,17 +102,17 @@ export default function FestivalInfoPage() {
               width="450px"
             />
             <p
-              className="absolute left-0 w-full p-10 text-xl font-bold text-left text-white bottom-16"
+              className="absolute left-0 w-full p-10 text-xl font-bold text-left text-white bottom-16 tablet:text-xs tablet:bottom-0 tablet:p-5"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               렛츠런파크 부산경남 블루밍 워터페스티벌
             </p>
             <p
-              className="absolute left-0 w-full p-10 font-bold text-left text-white text-md bottom-8"
+              className="absolute left-0 w-full p-10 font-bold text-left text-white text-md bottom-8 tablet:text-xs tablet:bottom-0 tablet:p-3 tablet:hidden"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               2024.07.06 ~ 2024.08.25
             </p>
             <p
-              className="absolute left-0 w-full p-10 text-left text-white bottom-2 text-md"
+              className="absolute left-0 w-full p-10 text-left text-white bottom-2 text-md tablet:text-xs tablet:bottom-0 tablet:p-3 tablet:hidden"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               부산 강서구
             </p>
@@ -125,17 +125,17 @@ export default function FestivalInfoPage() {
               width="450px"
             />
             <p
-              className="absolute left-0 w-full p-10 text-xl font-bold text-left text-white bottom-16"
+              className="absolute left-0 w-full p-10 text-xl font-bold text-left text-white bottom-16 tablet:text-xs tablet:bottom-0 tablet:p-5"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               렛츠런파크 부산경남 블루밍 워터페스티벌
             </p>
             <p
-              className="absolute left-0 w-full p-10 font-bold text-left text-white text-md bottom-8"
+              className="absolute left-0 w-full p-10 font-bold text-left text-white text-md bottom-8 tablet:text-xs tablet:bottom-0 tablet:p-3 tablet:hidden"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               2024.07.06 ~ 2024.08.25
             </p>
             <p
-              className="absolute left-0 w-full p-10 text-left text-white bottom-2 text-md"
+              className="absolute left-0 w-full p-10 text-left text-white bottom-2 text-md tablet:text-xs tablet:bottom-0 tablet:p-3 tablet:hidden"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               부산 강서구
             </p>
@@ -148,17 +148,17 @@ export default function FestivalInfoPage() {
               width="450px"
             />
             <p
-              className="absolute left-0 w-full p-10 text-xl font-bold text-left text-white bottom-16"
+              className="absolute left-0 w-full p-10 text-xl font-bold text-left text-white bottom-16 tablet:text-xs tablet:bottom-0 tablet:p-5"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               렛츠런파크 부산경남 블루밍 워터페스티벌
             </p>
             <p
-              className="absolute left-0 w-full p-10 font-bold text-left text-white text-md bottom-8"
+              className="absolute left-0 w-full p-10 font-bold text-left text-white text-md bottom-8 tablet:text-xs tablet:bottom-0 tablet:p-3 tablet:hidden"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               2024.07.06 ~ 2024.08.25
             </p>
             <p
-              className="absolute left-0 w-full p-10 text-left text-white bottom-2 text-md"
+              className="absolute left-0 w-full p-10 text-left text-white bottom-2 text-md tablet:text-xs tablet:bottom-0 tablet:p-3 tablet:hidden"
               style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
               부산 강서구
             </p>
@@ -183,7 +183,9 @@ export default function FestivalInfoPage() {
                   <img className="h-48 rounded-lg" src={festival.imgName} />
                   <div className="pt-3 pl-2">
                     <p className="text-lg font-bold">{festival.title}</p>
-                    <p className="pt-2 pb-1 text-sm">2024.06.28 ~ 2024.06.30</p>
+                    <p className="pt-2 pb-1 text-sm">
+                      {festival.festival_start} ~ {festival.festival_end}
+                    </p>
                     <p className="text-sm text-gray-400">
                       {festival.city_name} {festival.si_gu_name}
                     </p>

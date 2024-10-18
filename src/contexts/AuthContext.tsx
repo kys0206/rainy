@@ -3,7 +3,7 @@ import {createContext, useContext, useState, useCallback, useEffect} from 'react
 import * as U from '../utils'
 import {post} from '../server'
 
-export type LoggedUser = {email: string; password: string; id?: string}
+export type LoggedUser = {email: string; password: string; id?: string; userName?: string}
 type Callback = () => void
 
 type ContextType = {
@@ -44,6 +44,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
   const [errorMessage, setErrorMessage] = useState<string>('')
 
   const id = loggedUser?.id
+  const userName = loggedUser?.userName
 
   const signup = useCallback(
     (
@@ -75,24 +76,34 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
   )
 
   const login = useCallback((email: string, password: string, callback?: Callback) => {
-    const user = {id, email, password}
+    const user = {id, email, password, userName}
     U.readStringP('jwt')
       .then(jwt => {
         setJwt(jwt ?? '')
         return post('/auth/login', user, jwt)
       })
       .then(res => res.json())
-      .then((result: {ok: boolean; id?: string; errorMessage?: string}) => {
-        if (result.ok) {
-          setLoggedUser({email, password, id: result.id})
-          U.writeObjectP('user', {email, password, id: result.id}).finally(
-            () => callback && callback()
-          )
-          callback && callback()
-        } else {
-          setErrorMessage(result.errorMessage ?? '')
+      .then(
+        (result: {
+          ok: boolean
+          id?: string
+          userName?: string
+          errorMessage?: string
+        }) => {
+          if (result.ok) {
+            setLoggedUser({email, password, id: result.id, userName: result.userName})
+            U.writeObjectP('user', {
+              email,
+              password,
+              id: result.id,
+              userName: result.userName
+            }).finally(() => callback && callback())
+            callback && callback()
+          } else {
+            setErrorMessage(result.errorMessage ?? '')
+          }
         }
-      })
+      )
       .catch((e: Error) => {
         setErrorMessage(e.message ?? '')
       })
